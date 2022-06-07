@@ -175,37 +175,39 @@ async def run(loop):
         print("Subscribing to characteristic changes...")
         await client.start_notify(CHAR_UUID, data_converter)
         
-        #await sound()
+        await sound()
         # await loop_inf()
         #await asyncio.sleep(10)
         #await key_wait()
         await stop_ble_notify(client, CHAR_UUID)
         
-# async def sound():
-#     global count3
-#     while True:
-#         await asyncio.sleep(0.01)
-#         if (Fx[4][0]-iti)*0.2664-0.0977>-3.0:
-#                 count3=0
-#         elif (Fx[4][0]-iti)*0.2664-0.0977<-3.0 and (Fx[4][0]-iti)*0.2664-0.0977>=-5:
-#             if count3>10:
-#                 count3=0
-#                 pygame.mixer.init() #初期化
-#                 pygame.mixer.music.load("sei2.mp3") #読み込み
-#                 pygame.mixer.music.play(1) #再生
-#                 await asyncio.sleep(1)
-#                 pygame.mixer.music.stop() #終了
-#             else:
-#                 count3+=1
-#         if (Fx[4][0]-iti)*0.2664-0.0977<-5:
-#             count3=0
-#             pygame.mixer.init() #初期化
-#             pygame.mixer.music.load("ok.mp3") #読み込み
-#             pygame.mixer.music.play(1) #再生
-#             await asyncio.sleep(1)
-#             pygame.mixer.music.stop() #終了
-#         if msvcrt.kbhit():
-#             return
+async def sound():
+    global count3#力が一定時間かかっているか判断する
+    while True:
+        await asyncio.sleep(0.01)
+        if (Fx[4][0]-iti)*0.2664-0.0977>-3.0:
+                count3=0
+        #１段階目
+        elif (Fx[4][0]-iti)*0.2664-0.0977<-3.0 and (Fx[4][0]-iti)*0.2664-0.0977>=-5:
+            if count3>10:
+                count3=0
+                pygame.mixer.init() #初期化
+                pygame.mixer.music.load("sei2.mp3") #読み込み
+                pygame.mixer.music.play(1) #再生
+                await asyncio.sleep(1)
+                pygame.mixer.music.stop() #終了
+            else:
+                count3+=1
+        #２段階目
+        if (Fx[4][0]-iti)*0.2664-0.0977<-5:
+            count3=0
+            pygame.mixer.init() #初期化
+            pygame.mixer.music.load("ok.mp3") #読み込み
+            pygame.mixer.music.play(1) #再生
+            await asyncio.sleep(1)
+            pygame.mixer.music.stop() #終了
+        if msvcrt.kbhit():
+            return
 async def loop_inf():
     while True:
         await asyncio.sleep(10)
